@@ -21,7 +21,7 @@ public class AlunoRepositoryMySQL : Repository<Aluno>
 
     public void trocarClasse(Materia materia, Aluno aluno)
     {
-        if (ObterPorId(Convert.ToInt32(aluno.Id)).Materia != null)
+        if (ObterPorId(Convert.ToInt32(aluno.Id)).MateriaId != null)
         {
             if (ObterPorId(Convert.ToInt32(aluno.Id)).Materia == materia)
             {

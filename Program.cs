@@ -284,10 +284,6 @@ internal abstract class Program
                                                 Console.Clear();
                                                 gerDeAlunos.Trocar(aluno);
                                                 break;
-                                            /*case 3: // Desistir da matéria
-                                                Console.Clear();
-                                                gerDeAlunos.Desistir(aluno);
-                                                break;*/
                                             case 3: // Repensar isso tal vez, vou fazer um ver minha matéria
                                                 Console.Clear();
                                                 gerDeAlunos.ImprimirMateria(aluno);
@@ -352,10 +348,11 @@ internal abstract class Program
     {
         int op = 0;
         bool avancar = false;
-            
+
         while (!avancar)
         {
-            Console.WriteLine("A ferramenta TestMaster é direcionada a 2 tipos diferentes de usuários, selecione a opção que melhor se encaixa para você:");
+            Console.WriteLine(
+                "A ferramenta TestMaster é direcionada a 2 tipos diferentes de usuários, selecione a opção que melhor se encaixa para você:");
             Console.WriteLine("1 - Sou um aluno, quero ter acesso a minha matéria e minhas provas.");
             Console.WriteLine("2 - Sou um professor, quero editar provas.");
             Console.WriteLine("0 - Quero sair da ferramenta.");
@@ -363,7 +360,7 @@ internal abstract class Program
 
             if (int.TryParse(Console.ReadLine(), out op))
             {
-                if (op >=0 && op <=2)
+                if (op >= 0 && op <= 2)
                 {
                     avancar = true;
                 }
@@ -379,43 +376,9 @@ internal abstract class Program
                 Console.WriteLine("Opção inválida, insira uma opção válida!");
             }
         }
-    return op;
-    }
 
-    public static int MenuLogin()
-    {
-        int op = 0;
-        bool avancar = false;
-        
-        while (!avancar)
-        {
-            Console.WriteLine("Agora chegou a hora de acessar a ferramenta, se você já possui um cadastro pode logar, caso contrário, se cadastre de forma rápida e fácil:");
-            Console.WriteLine("1 - Já tenho um cadastro e quero logar.");
-            Console.WriteLine("2 - Ainda não tenho um cadastro mas quero me cadastrar.");
-            Console.WriteLine("0 - Quero sair da ferramenta.");
-            Console.WriteLine("Opção: ");
-
-            if (int.TryParse(Console.ReadLine(), out op))
-            {
-                if (op >=0 && op <=2)
-                {
-                    avancar = true;
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine("Opção inválida, insira uma opção válida!");
-                }
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("Opção inválida, insira uma opção válida!");
-            }
-            }
         return op;
     }
-
     public static int MenuProfessor()
     {
         int op = 0;

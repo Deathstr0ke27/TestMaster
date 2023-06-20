@@ -11,9 +11,11 @@ public class GerenciamentoDeAlunos
     private ProvaRepositoryMySQL _provaRepositoryMySql = new ProvaRepositoryMySQL();
     private AlternativaRepositoryMySQL _alternativaRepositoryMySql = new AlternativaRepositoryMySQL();
     private QuestaoRepositoryMySQL _questaoRepositoryMySql = new QuestaoRepositoryMySQL();
+    private AlunoProvaRepositoryMySQL _alunoProvaRepositoryMySql = new AlunoProvaRepositoryMySQL();
 
     private GerenciamentoDeMaterias gerDeMaterias = new GerenciamentoDeMaterias();
     private GerenciamentoDeProvas gerDeProvas = new GerenciamentoDeProvas();
+    private GerenciamentoDeAlunoProvas gerDeAlunoProvas = new GerenciamentoDeAlunoProvas();
     //private Aluno aluno = new Aluno();
 
     public Aluno registerNewAluno(ProvasContext context)
@@ -232,53 +234,77 @@ public class GerenciamentoDeAlunos
     
     public void FazerProva(Aluno aluno)
     {
-        int acertos = 0;
-
-        Console.WriteLine("--== PROVAS ==--");
-        ObterProvasAluno(aluno);
-
-        Console.WriteLine("Id da Prova: ");
-        int id;
-        while (!int.TryParse(Console.ReadLine(), out id))
+        if (aluno.MateriaId != null)
         {
-            Console.WriteLine("Entrada inválida. Digite um número válido para o Id da Prova: ");
-        }
-
-        Prova prova = _provaRepositoryMySql.ObterPorId(id);
-
-        List<Questao> questoes = _questaoRepositoryMySql.ObterPorProva(prova);
-
-        foreach (var questao in questoes)
-        {
-            List<Alternativa> alternativas = _alternativaRepositoryMySql.ObterPorQuestao(questao);
-            Console.WriteLine(questao.Nome);
-
-            Alternativa certo = null;
-
-            foreach (var alternativa in alternativas)
+            Materia materia = _materiaRepositoryMySql.ObterPorId(aluno.MateriaId);
+            List<Prova> provas = _provaRepositoryMySql.ObterPorMateria(materia);
+            if (provas.Count > 0)
             {
-                Console.WriteLine(alternativa.Id + " - " + alternativa.Texto);
-                if (alternativa.Certo)
+                int acertos = 0;
+
+                Console.WriteLine("--== PROVAS ==--");
+                ObterProvasAluno(aluno);
+
+                Console.WriteLine("Id da Prova: ");
+                int id;
+                while (!int.TryParse(Console.ReadLine(), out id))
                 {
-                    certo = alternativa;
+                    Console.WriteLine("Entrada inválida. Digite um número válido para o Id da Prova: ");
+                }
+
+                Prova prova = _provaRepositoryMySql.ObterPorId(id);
+    
+                if (prova.Id == null)
+                {
+                    Console.WriteLine("Esse ID não existe no banco de dados, insira um que exista: ");
+                    while (!int.TryParse(Console.ReadLine(), out id))
+                    {
+                        Console.WriteLine("Entrada inválida. Digite um número válido para o ID da Materia: ");
+                    }
+                }
+        
+                //VERIFICAÇÃO SE JÁ FEZ A PROVA
+
+                if (gerDeAlunoProvas.ObterPorId(aluno, prova) == null)
+                {
+                    List<Questao> questoes = _questaoRepositoryMySql.ObterPorProva(prova);
+
+                    foreach (var questao in questoes)
+                    {
+                        List<Alternativa> alternativas = _alternativaRepositoryMySql.ObterPorQuestao(questao);
+                        Console.WriteLine(questao.Nome);
+
+                        Alternativa certo = null;
+
+                        foreach (var alternativa in alternativas)
+                        {
+                            Console.WriteLine(alternativa.Id + " - " + alternativa.Texto);
+                            if (alternativa.Certo)
+                            {
+                                certo = alternativa;
+                            }
+                        }
+
+                        Console.WriteLine("Resposta: ");
+                        int resposta;
+                        while (!int.TryParse(Console.ReadLine(), out resposta))
+                        {
+                            Console.WriteLine("Entrada inválida. Digite um número válido para a Resposta: ");
+                        }
+
+                        if (certo.Id == resposta)
+                        {
+                            acertos++;
+                        }
+                    }
+
+                    Console.WriteLine(acertos + " / " + questoes.Count);
+                    Double nota = Convert.ToDouble(acertos) * 100 / questoes.Count;
+                    Console.WriteLine("Nota: " + nota);
+                    gerDeAlunoProvas.Adicionar(aluno, prova, nota);
                 }
             }
-
-            Console.WriteLine("Resposta: ");
-            int resposta;
-            while (!int.TryParse(Console.ReadLine(), out resposta))
-            {
-                Console.WriteLine("Entrada inválida. Digite um número válido para a Resposta: ");
-            }
-
-            if (certo.Id == resposta)
-            {
-                acertos++;
-            }
         }
-
-        Console.WriteLine(acertos + " / " + questoes.Count);
-        Console.WriteLine("Nota: " + Convert.ToDouble(acertos) * 100 / questoes.Count);
     }
 
     public Materia ObterMateriaAluno(Aluno aluno)

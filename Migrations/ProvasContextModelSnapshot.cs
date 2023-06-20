@@ -79,22 +79,25 @@ namespace TestMaster2.Migrations
                     b.ToTable("tb_aluno", (string)null);
                 });
 
-            modelBuilder.Entity("TestMaster2.Models.AlunoMateria", b =>
+            modelBuilder.Entity("TestMaster2.Models.AlunoProva", b =>
                 {
-                    b.Property<int>("AlunoId")
+                    b.Property<int?>("AlunoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MateriaId")
+                    b.Property<int?>("ProvaId")
                         .HasColumnType("int");
+
+                    b.Property<bool>("Feito")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<double>("Nota")
                         .HasColumnType("double");
 
-                    b.HasKey("AlunoId", "MateriaId");
+                    b.HasKey("AlunoId", "ProvaId");
 
-                    b.HasIndex("MateriaId");
+                    b.HasIndex("ProvaId");
 
-                    b.ToTable("tb_aluno_materia", (string)null);
+                    b.ToTable("tb_aluno_prova", (string)null);
                 });
 
             modelBuilder.Entity("TestMaster2.Models.Materia", b =>
@@ -219,7 +222,7 @@ namespace TestMaster2.Migrations
                     b.Navigation("Materia");
                 });
 
-            modelBuilder.Entity("TestMaster2.Models.AlunoMateria", b =>
+            modelBuilder.Entity("TestMaster2.Models.AlunoProva", b =>
                 {
                     b.HasOne("TestMaster2.Models.Aluno", "Aluno")
                         .WithMany()
@@ -227,15 +230,15 @@ namespace TestMaster2.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TestMaster2.Models.Materia", "Materia")
+                    b.HasOne("TestMaster2.Models.Prova", "Prova")
                         .WithMany()
-                        .HasForeignKey("MateriaId")
+                        .HasForeignKey("ProvaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Aluno");
 
-                    b.Navigation("Materia");
+                    b.Navigation("Prova");
                 });
 
             modelBuilder.Entity("TestMaster2.Models.Materia", b =>

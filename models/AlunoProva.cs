@@ -7,14 +7,14 @@ public class AlunoProva
     
     [ForeignKey("AlunoId")]
     public Aluno Aluno { get; set; }
-    public int AlunoId { get; set; }
+    public int? AlunoId { get; set; }
     [ForeignKey("ProvaId")]
     public Prova Prova { get; set; }
-    public int ProvaId { get; set; }
+    public int? ProvaId { get; set; }
     public bool Feito { get; set; }
     public double Nota { get; set; }
 
-    public AlunoProva(int alunoId, int provaId, bool feito, double nota)
+    public AlunoProva(int? alunoId, int? provaId, bool feito, double nota)
     {
         AlunoId = alunoId;
         ProvaId = provaId;
